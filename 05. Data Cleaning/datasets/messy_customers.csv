@@ -1,0 +1,7 @@
+age,income,city,purchased
+22.0,35000,Delhi,yes
+25.0,42000,Mumbai,no
+,39000,Delhi,yes
+25.0,42000,Mumbai,no
+120.0,999999,Pune,yes
+31.0,,,no
