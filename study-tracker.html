@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ML Study Tracker</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --background: #f6f8fa;
+      --surface: #ffffff;
+      --surface-strong: #eef2f6;
+      --text: #17202a;
+      --muted: #637083;
+      --border: #d8dee4;
+      --accent: #1f883d;
+      --accent-dark: #116329;
+      --danger: #cf222e;
+      --shadow: 0 10px 30px rgba(27, 31, 36, 0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #0d1117;
+        --surface: #161b22;
+        --surface-strong: #21262d;
+        --text: #f0f6fc;
+        --muted: #8b949e;
+        --border: #30363d;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(1100px, calc(100% - 32px));
+      margin: 32px auto;
+    }
+
+    header {
+      display: grid;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .summary-item,
+    .toolbar,
+    .topic-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-item {
+      padding: 16px;
+    }
+
+    .summary-label {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .summary-value {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 12px;
+      overflow: hidden;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+      transition: width 180ms ease;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .filter-group,
+    .action-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button,
+    a.open-link {
+      min-height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      background: var(--surface-strong);
+      color: var(--text);
+      font: inherit;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    button:hover,
+    a.open-link:hover {
+      border-color: var(--muted);
+    }
+
+    button.active,
+    button.done-button.is-done {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    button.danger {
+      color: var(--danger);
+    }
+
+    .topic-list {
+      overflow: hidden;
+    }
+
+    .topic-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .topic-row:first-child {
+      border-top: 0;
+    }
+
+    .topic-row.done {
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .topic-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 700;
+    }
+
+    .status-icon {
+      width: 30px;
+      flex: 0 0 30px;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .topic-name {
+      overflow-wrap: anywhere;
+    }
+
+    .topic-meta {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .empty {
+      display: none;
+      padding: 22px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .next-topic {
+      padding: 14px 16px;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        width: min(100% - 20px, 1100px);
+        margin-top: 18px;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .topic-row {
+        grid-template-columns: 1fr;
+      }
+
+      button,
+      a.open-link {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Machine Learning Study Tracker</h1>
+        <p class="subtitle">Click Done when you finish a topic. Your progress is saved automatically in this browser, so you do not need to edit README files or commit anything.</p>
+      </div>
+
+      <div class="summary" aria-label="Study progress summary">
+        <div class="summary-item">
+          <span class="summary-label">Completed</span>
+          <span class="summary-value" id="completedCount">0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Remaining</span>
+          <span class="summary-value" id="remainingCount">31</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Progress</span>
+          <span class="summary-value" id="progressPercent">0%</span>
+        </div>
+      </div>
+
+      <div class="progress-track" aria-label="Overall completion">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="next-topic" id="nextTopic">Next: 01. Python For ML</div>
+    </header>
+
+    <section class="toolbar" aria-label="Tracker controls">
+      <div class="filter-group" role="group" aria-label="Filter topics">
+        <button type="button" class="active" data-filter="all">All</button>
+        <button type="button" data-filter="todo">To Study</button>
+        <button type="button" data-filter="done">Done</button>
+      </div>
+      <div class="action-group">
+        <button type="button" id="markNextButton">Mark Next Done</button>
+        <button type="button" id="resetButton" class="danger">Reset Progress</button>
+      </div>
+    </section>
+
+    <section class="topic-list" id="topicList" aria-label="Machine learning topics"></section>
+    <div class="empty" id="emptyState">No topics match this filter.</div>
+  </main>
+
+  <script>
+    const topics = [
+      ["01. Python For ML", "01_python_for_ml.ipynb"],
+      ["02. NumPy", "02_numpy.ipynb"],
+      ["03. Pandas", "03_pandas.ipynb"],
+      ["04. Matplotlib And Seaborn", "04_matplotlib_and_seaborn.ipynb"],
+      ["05. Data Cleaning", "05_data_cleaning.ipynb"],
+      ["06. Exploratory Data Analysis", "06_exploratory_data_analysis.ipynb"],
+      ["07. Feature Engineering", "07_feature_engineering.ipynb"],
+      ["08. Train Test Split", "08_train_test_split.ipynb"],
+      ["09. Linear Regression", "09_linear_regression.ipynb"],
+      ["10. Multiple Linear Regression", "10_multiple_linear_regression.ipynb"],
+      ["11. Polynomial Regression", "11_polynomial_regression.ipynb"],
+      ["12. Logistic Regression", "12_logistic_regression.ipynb"],
+      ["13. Decision Tree", "13_decision_tree.ipynb"],
+      ["14. Random Forest", "14_random_forest.ipynb"],
+      ["15. Support Vector Machine", "15_support_vector_machine.ipynb"],
+      ["16. K-Nearest Neighbors", "16_k_nearest_neighbors.ipynb"],
+      ["17. Naive Bayes", "17_naive_bayes.ipynb"],
+      ["18. K-Means Clustering", "18_k_means_clustering.ipynb"],
+      ["19. Hierarchical Clustering", "19_hierarchical_clustering.ipynb"],
+      ["20. Principal Component Analysis", "20_principal_component_analysis.ipynb"],
+      ["21. Regularization", "21_regularization.ipynb"],
+      ["22. Cross Validation", "22_cross_validation.ipynb"],
+      ["23. Hyperparameter Tuning", "23_hyperparameter_tuning.ipynb"],
+      ["24. Model Evaluation Metrics", "24_model_evaluation_metrics.ipynb"],
+      ["25. Imbalanced Data Handling", "25_imbalanced_data_handling.ipynb"],
+      ["26. Ensemble Learning", "26_ensemble_learning.ipynb"],
+      ["27. Bagging And Boosting", "27_bagging_and_boosting.ipynb"],
+      ["28. Gradient Boosting", "28_gradient_boosting.ipynb"],
+      ["29. XGBoost", "29_xgboost.ipynb"],
+      ["30. Model Saving And Loading", "30_model_saving_and_loading.ipynb"],
+      ["31. End-To-End ML Projects", "31_end_to_end_ml_projects.ipynb"]
+    ];
+
+    const storageKey = "machine-learning-study-progress";
+    const completed = new Set(JSON.parse(localStorage.getItem(storageKey) || "[]"));
+    let activeFilter = "all";
+
+    const topicList = document.getElementById("topicList");
+    const emptyState = document.getElementById("emptyState");
+    const completedCount = document.getElementById("completedCount");
+    const remainingCount = document.getElementById("remainingCount");
+    const progressPercent = document.getElementById("progressPercent");
+    const progressFill = document.getElementById("progressFill");
+    const nextTopic = document.getElementById("nextTopic");
+
+    function saveProgress() {
+      localStorage.setItem(storageKey, JSON.stringify([...completed]));
+    }
+
+    function topicUrl(folder, notebook) {
+      return encodeURI(`${folder}/${notebook}`);
+    }
+
+    function render() {
+      topicList.innerHTML = "";
+
+      const rows = topics
+        .map(([folder, notebook], index) => ({
+          id: folder,
+          number: index + 1,
+          folder,
+          notebook,
+          done: completed.has(folder)
+        }))
+        .filter((topic) => {
+          if (activeFilter === "done") return topic.done;
+          if (activeFilter === "todo") return !topic.done;
+          return true;
+        });
+
+      rows.forEach((topic) => {
+        const row = document.createElement("article");
+        row.className = `topic-row${topic.done ? " done" : ""}`;
+
+        const title = document.createElement("div");
+        title.innerHTML = `
+          <div class="topic-title">
+            <span class="status-icon" aria-hidden="true">${topic.done ? "✅" : "⬜"}</span>
+            <span class="topic-name">${topic.folder}</span>
+          </div>
+          <div class="topic-meta">${topic.notebook}</div>
+        `;
+
+        const openLink = document.createElement("a");
+        openLink.className = "open-link";
+        openLink.href = topicUrl(topic.folder, topic.notebook);
+        openLink.textContent = "Open Notebook";
+
+        const doneButton = document.createElement("button");
+        doneButton.type = "button";
+        doneButton.className = `done-button${topic.done ? " is-done" : ""}`;
+        doneButton.textContent = topic.done ? "Done" : "Mark Done";
+        doneButton.setAttribute("aria-pressed", String(topic.done));
+        doneButton.addEventListener("click", () => {
+          if (completed.has(topic.folder)) {
+            completed.delete(topic.folder);
+          } else {
+            completed.add(topic.folder);
+          }
+          saveProgress();
+          render();
+        });
+
+        row.append(title, openLink, doneButton);
+        topicList.appendChild(row);
+      });
+
+      const doneCount = completed.size;
+      const remaining = topics.length - doneCount;
+      const percent = Math.round((doneCount / topics.length) * 100);
+      const next = topics.find(([folder]) => !completed.has(folder));
+
+      completedCount.textContent = doneCount;
+      remainingCount.textContent = remaining;
+      progressPercent.textContent = `${percent}%`;
+      progressFill.style.width = `${percent}%`;
+      nextTopic.textContent = next ? `Next: ${next[0]}` : "All topics completed.";
+      emptyState.style.display = rows.length ? "none" : "block";
+    }
+
+    document.querySelectorAll("[data-filter]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-filter]").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        activeFilter = button.dataset.filter;
+        render();
+      });
+    });
+
+    document.getElementById("markNextButton").addEventListener("click", () => {
+      const next = topics.find(([folder]) => !completed.has(folder));
+      if (!next) return;
+      completed.add(next[0]);
+      saveProgress();
+      render();
+    });
+
+    document.getElementById("resetButton").addEventListener("click", () => {
+      const shouldReset = confirm("Reset all saved study progress in this browser?");
+      if (!shouldReset) return;
+      completed.clear();
+      saveProgress();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

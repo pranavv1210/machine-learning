@@ -57,6 +57,10 @@ jupyter notebook
 
 4. Open the folders in order and run each notebook from top to bottom.
 
+## Study Progress Tracker
+
+Open `study-tracker.html` in your browser to track your progress with clickable Done buttons. The tracker saves progress automatically in your browser, so you do not need to edit this README every time you complete a topic.
+
 ## Recommended Study Order
 
 Follow the numbered folders from `01. Python For ML` through `31. End-To-End ML Projects`. The order is intentional:
