@@ -1,23 +1,45 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f7f8f5"><title>AI Learning Hub</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f6f3">
+<title>AI Learning Hub | Pranav</title>
 <style>
-:root{font-family:Inter,system-ui,sans-serif;color:#17221f;background:#f7f8f5}*{box-sizing:border-box}body{margin:0}header{background:#fff;border-bottom:1px solid #e5e9e6;padding:18px 5%}.brand{font-weight:850;font-size:20px;text-decoration:none;color:#245d4b}.wrap{max-width:1080px;margin:auto;padding:48px 5%}h1{font-size:clamp(36px,6vw,64px);letter-spacing:-.05em;line-height:1.05;margin:12px 0}.muted{color:#697773;line-height:1.6}.eyebrow{color:#245d4b;text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:800}.stats,.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:28px 0}.stat,.card{background:#fff;border:1px solid #e5e9e6;border-radius:16px;padding:20px}.stat small{display:block;color:#697773}.stat strong{font-size:28px}.card{display:flex;flex-direction:column;gap:10px}.card h2{margin:0;font-size:22px}.card p{color:#697773;font-size:14px;line-height:1.5}.btn{display:inline-block;background:#245d4b;color:white;text-decoration:none;border:0;border-radius:10px;padding:11px 15px;font-weight:750;cursor:pointer}.light{background:#eaf1ec;color:#245d4b}.bar{height:8px;background:#e9eeea;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:#245d4b;width:0}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.note{background:#fff8ed;border:1px solid #f0dfc7;border-radius:12px;padding:14px;color:#79572f;font-size:13px;line-height:1.5}footer{padding:32px 0;color:#697773;font-size:12px}@media(max-width:700px){.stats,.cards{grid-template-columns:1fr}.wrap{padding-top:34px}}
-</style></head>
-<body><header><a class="brand" href="./">AI Learning Hub</a></header>
-<main class="wrap"><div class="eyebrow">Your personal study space</div><h1>Learn. Build.<br>Understand deeply.</h1>
-<p class="muted">One home for Machine Learning, Deep Learning and scikit-learn. Open the original notebooks, follow each chapter and track what you have studied.</p>
-<section class="stats"><div class="stat"><small>Total notebooks</small><strong>101</strong></div><div class="stat"><small>Completed</small><strong id="done">0</strong></div><div class="stat"><small>Overall progress</small><strong id="pct">0%</strong><div class="bar"><i id="bar"></i></div></div></section>
-<h2 style="margin-top:38px">Choose a learning path</h2><section class="cards" id="courses"></section>
-<footer>Hosted on GitHub Pages · Source notebooks remain in their original repositories.</footer></main>
-<script>
-const key="ai-learning-hub-progress-v1",courses=[["machine-learning","Machine Learning",31,"https://pranavv1210.github.io/machine-learning/study-tracker.html","Python, data preparation, regression, classification, clustering and end-to-end ML."],["deep-learning","Deep Learning",43,"https://pranavv1210.github.io/deep-learning/","Tensors, neural networks, optimization, CNNs, sequence models and transformers."],["scikit-learn","scikit-learn",27,"https://pranavv1210.github.io/scikit-learn/","Estimators, preprocessing, model selection, evaluation and practical workflows."]];
-function get(){try{return JSON.parse(localStorage.getItem(key)||"{}")}catch{return {}}}
-function stats(){let total=0,done=0;for(const [id,,n] of courses){total+=n;done+=Object.keys(get()[id]||{}).filter(k=>get()[id][k]).length}return {total,done}}
-function render(){const s=stats(),p=Math.round(s.done/s.total*100);document.getElementById("done").textContent=s.done;document.getElementById("pct").textContent=p+"%";document.getElementById("bar").style.width=p+"%";const root=document.getElementById("courses");root.innerHTML="";for(const [id,name,n,url,desc] of courses){const d=Object.keys(get()[id]||{}).filter(k=>get()[id][k]).length;const c=document.createElement("article");c.className="card";c.innerHTML="<div class='eyebrow'>"+id.replace("-"," ")+"</div><h2></h2><p></p><div class='bar'><i style='width:"+Math.round(d/n*100)+"%'></i></div><small class='muted'>"+d+" / "+n+" studied</small><a class='btn' href='"+url+"'>Open course →</a>";c.querySelector("h2").textContent=name;c.querySelector("p").textContent=desc;root.append(c)}}
-document.getElementById("export").onclick=()=>{const a=document.createElement("a"),u=URL.createObjectURL(new Blob([JSON.stringify({format:"ai-learning-hub-progress",progress:get()},null,2)],{type:"application/json"}));a.href=u;a.download="ai-learning-hub-progress.json";a.click();URL.revokeObjectURL(u)};
-document.getElementById("import").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(x.format!=="ai-learning-hub-progress")throw 0;localStorage.setItem(key,JSON.stringify(x.progress));render()}catch{alert("Invalid progress file")}};r.readAsText(f)};
-window.addEventListener("storage",render);render();
-</script></body></html>
+:root{font-family:Aptos,"Aptos Display","Segoe UI",system-ui,sans-serif;color:#17251f;background:#f4f6f3;font-synthesis:none;text-rendering:optimizeLegibility}
+*{box-sizing:border-box}body{margin:0}a{color:inherit}
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 max(6vw,24px);background:rgba(255,255,255,.82);border-bottom:1px solid #e4e9e4}
+.brand{font-size:17px;font-weight:750;letter-spacing:-.03em;text-decoration:none}.brand-mark{display:inline-block;width:10px;height:10px;border-radius:3px;background:#28745b;margin-right:10px}
+.top-link{font-size:13px;color:#587065;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:76px 28px 44px}
+.eyebrow{font-size:11px;letter-spacing:.19em;text-transform:uppercase;font-weight:800;color:#34775f}
+h1{font-size:clamp(42px,7vw,76px);line-height:.99;letter-spacing:-.065em;margin:18px 0 22px;max-width:780px;font-weight:760}
+.lead{font-size:18px;line-height:1.65;color:#64736b;max-width:680px;margin:0}
+.intro{display:flex;justify-content:space-between;gap:36px;align-items:flex-end}
+.intro-side{width:190px;flex:none;border-left:1px solid #cbd6ce;padding:4px 0 4px 18px;color:#718078;font-size:12px;line-height:1.7}
+.section-head{display:flex;align-items:end;justify-content:space-between;margin:76px 0 20px;gap:20px}
+h2{font-size:25px;letter-spacing:-.04em;margin:0}.section-head p{margin:0;color:#78857e;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{position:relative;min-height:290px;padding:26px;border:1px solid #e0e7e1;border-radius:18px;background:#fff;display:flex;flex-direction:column;align-items:flex-start;box-shadow:0 8px 30px rgba(27,53,40,.035);transition:transform .2s,border-color .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);border-color:#b6cbbd;box-shadow:0 16px 36px rgba(27,53,40,.08)}
+.card-index{font-size:11px;font-weight:750;letter-spacing:.12em;color:#87958c}
+.card h3{font-size:25px;letter-spacing:-.045em;margin:34px 0 10px}.card p{font-size:14px;line-height:1.7;color:#68766e;margin:0 0 24px}
+.card a{margin-top:auto;text-decoration:none;font-size:13px;font-weight:750;color:#21684e;border-bottom:1px solid #b8d1c1;padding-bottom:4px}
+.footer{margin-top:70px;padding-top:22px;border-top:1px solid #dfe6df;color:#87938c;font-size:12px}
+@media(max-width:800px){.intro{display:block}.intro-side{margin-top:28px;width:auto}.grid{grid-template-columns:1fr}.card{min-height:220px}.section-head{margin-top:54px}.wrap{padding-top:56px}}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="./"><span class="brand-mark"></span>AI Learning Hub</a><a class="top-link" href="https://github.com/pranavv1210">GitHub profile ↗</a></header>
+<main class="wrap">
+<section class="intro"><div><div class="eyebrow">A focused space for learning by building</div><h1>Understand the ideas.<br>Build the intuition.</h1><p class="lead">A curated collection of notebooks and practical lessons across machine learning, deep learning and scikit-learn. Choose a path and explore the original material.</p></div><aside class="intro-side">THREE LEARNING PATHS<br>Hands-on notebooks<br>Practical references</aside></section>
+<section><div class="section-head"><h2>Explore the learning paths</h2><p>Choose a subject to get started</p></div>
+<div class="grid">
+<article class="card"><span class="card-index">01 / FOUNDATIONS</span><h3>Machine Learning</h3><p>Work through data preparation, regression, classification, clustering, model evaluation and practical ML projects.</p><a href="https://github.com/pranavv1210/machine-learning/tree/main">Explore notebooks ↗</a></article>
+<article class="card"><span class="card-index">02 / NEURAL NETWORKS</span><h3>Deep Learning</h3><p>Explore tensors, neural networks, optimization, convolutional models, sequence learning and transformers.</p><a href="https://github.com/pranavv1210/deep-learning/tree/main">Explore notebooks ↗</a></article>
+<article class="card"><span class="card-index">03 / PRACTICAL TOOLKIT</span><h3>scikit-learn</h3><p>Learn estimators, preprocessing, pipelines, model selection, evaluation and reliable machine-learning workflows.</p><a href="https://github.com/pranavv1210/scikit-learn/tree/main">Explore notebooks ↗</a></article>
+</div></section>
+<footer class="footer">A personal learning collection · Notebooks and source material hosted on GitHub</footer>
+</main>
+</body>
+</html>
